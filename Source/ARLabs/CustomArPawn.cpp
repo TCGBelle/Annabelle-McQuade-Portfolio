@@ -21,6 +21,9 @@ ACustomARPawn::ACustomARPawn()
 	CameraComponent->SetupAttachment(RootComponent);
 
 	cameraNotifyLoopTime = 4.0f;
+
+	static ConstructorHelpers::FObjectFinder<UARSessionConfig> CofigAsset(TEXT("ARSessionConfig'/Game/Images/CustomARSessionCOnfig.CustomARSessionConfig'"));
+	Config = CofigAsset.Object;
 }
 
 // Called when the game starts or when spawned
@@ -28,7 +31,6 @@ void ACustomARPawn::BeginPlay()
 {
 	Super::BeginPlay();
 	UKismetSystemLibrary::PrintString(this, FString(TEXT("Hello world")), true, true, FLinearColor(0, 0.66, 1, 1), 5);
-	UARSessionConfig* Config = NewObject<UARSessionConfig>();
 	UARBlueprintLibrary::StartARSession(Config);
 	GetWorldTimerManager().SetTimer(cameraTicker, this, &ACustomARPawn::DisplayCameraInfo, cameraNotifyLoopTime, true, 0.0f);
 	SpawnCube();

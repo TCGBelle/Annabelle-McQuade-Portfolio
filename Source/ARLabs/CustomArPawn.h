@@ -41,4 +41,5 @@ public:
 
 	FTimerHandle cameraTicker;
 	float cameraNotifyLoopTime;
+	UARSessionConfig* Config;
 };
