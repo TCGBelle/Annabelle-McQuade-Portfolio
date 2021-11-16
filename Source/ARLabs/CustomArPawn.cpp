@@ -33,7 +33,7 @@ void ACustomARPawn::BeginPlay()
 	UKismetSystemLibrary::PrintString(this, FString(TEXT("Hello world")), true, true, FLinearColor(0, 0.66, 1, 1), 5);
 	UARBlueprintLibrary::StartARSession(Config);
 	GetWorldTimerManager().SetTimer(cameraTicker, this, &ACustomARPawn::DisplayCameraInfo, cameraNotifyLoopTime, true, 0.0f);
-	SpawnCube();
+	//SpawnCube();
 }
 
 // Called every frame
@@ -41,6 +41,7 @@ void ACustomARPawn::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	FindCandidateImages();
 }
 
 // Called to bind functionality to input
@@ -112,6 +113,32 @@ void ACustomARPawn::SpawnCube()
 	FActorSpawnParameters SpawnInfo;
 	FRotator myRot(0, 0, 0);
 	FVector myLoc(900, 0, 0);
-	ACustomARActor* customActor = GetWorld()->SpawnActor<ACustomARActor>(myLoc, myRot, SpawnInfo);
+	customActor = GetWorld()->SpawnActor<ACustomARActor>(myLoc, myRot, SpawnInfo);
+}
+
+void ACustomARPawn::FindCandidateImages()
+{
+	auto trackedImages = UARBlueprintLibrary::GetAllTrackedImages();
+	GEngine->AddOnScreenDebugMessage(-1, 0, FColor::Red, FString::Printf(TEXT("Images number %d"), trackedImages.Num()));
+	//UKismetSystemLibrary::PrintString(this, FString::Printf(TEXT("Images number %d"), trackedImages), true, true, FLinearColor(1, 0, 0, 1), 5);
+	for (UARTrackedImage* trackedImage : trackedImages)
+	{
+		if (trackedImage->GetDetectedImage())
+			if (trackedImage->GetDetectedImage()->GetFreiendlyName().Equals("portrait"))//change to my van gogh freidnly anme when i have access
+			{
+				//If the VanGogh image is first seen then spawn an actor in its location
+				if (!bGoghFound)
+				{
+					SpawnCube();
+					bGoghFound = true;
+				}
+				auto Tf = trackedImage->GetLocalToTrackingTransform();
+				// Setting the scale to the transform. this can be done using matrices too.
+				TF.SetScale3D(FVector(0.1f));
+				customActor->SetActorTransform(TF);
+				FVector SpawnLoc = TF.GetLocation();
+				GEngine->AddOnScreenDebugMessage(-1, 0, FColor::Red, FString::Printf(TEXT("%f, %f, %f"), SpawnLoc.X, SpawnLoc.Y, SpawnLoc.Z));
+			}
+	}
 }
 

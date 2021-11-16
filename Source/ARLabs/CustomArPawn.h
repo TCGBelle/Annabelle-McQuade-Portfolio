@@ -35,6 +35,7 @@ public:
 	virtual bool WorldHitTest(const FVector2D touchPos, FHitResult hitResult);
 	virtual void DisplayCameraInfo();
 	virtual void SpawnCube();
+	virtual void FindCandidateImages();
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite) USceneComponent* ScnComponent;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite) UCameraComponent* CameraComponent;
@@ -42,4 +43,6 @@ public:
 	FTimerHandle cameraTicker;
 	float cameraNotifyLoopTime;
 	UARSessionConfig* Config;
+	bool bGoghFound = false;
+	ACustomARActor* customActor
 };
