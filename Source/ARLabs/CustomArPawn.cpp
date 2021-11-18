@@ -21,6 +21,8 @@ ACustomARPawn::ACustomARPawn()
 	CameraComponent->SetupAttachment(RootComponent);
 
 	cameraNotifyLoopTime = 4.0f;
+	scanningTime = 1.0f;
+	intialTime = 0.0f;
 
 	static ConstructorHelpers::FObjectFinder<UARSessionConfig> CofigAsset(TEXT("ARSessionConfig'/Game/Images/CustomARSessionCOnfig.CustomARSessionConfig'"));
 	Config = CofigAsset.Object;
@@ -31,7 +33,7 @@ void ACustomARPawn::BeginPlay()
 {
 	Super::BeginPlay();
 	UKismetSystemLibrary::PrintString(this, FString(TEXT("Hello world")), true, true, FLinearColor(0, 0.66, 1, 1), 5);
-	UARBlueprintLibrary::StartARSession(Config);
+	//UARBlueprintLibrary::StartARSession(Config);
 	GetWorldTimerManager().SetTimer(cameraTicker, this, &ACustomARPawn::DisplayCameraInfo, cameraNotifyLoopTime, true, 0.0f);
 	//SpawnCube();
 }
@@ -40,8 +42,23 @@ void ACustomARPawn::BeginPlay()
 void ACustomARPawn::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
-	FindCandidateImages();
+	if (intialTime >= 2.0f)
+	{
+		if (scanningForPlanes == true)
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 0, FColor::Red, FString::Printf(TEXT("Scan complete")));
+			GetWorldTimerManager().SetTimer(scanningTicker, this, &ACustomARPawn::ScanningForPlanes, scanningTime, true, 0.0f);
+		}
+		else
+		{
+			FindCandidateImages();
+		}
+	}
+	else
+	{
+		intialTime += DeltaTime;
+		GEngine->AddOnScreenDebugMessage(-1, 0, FColor::Red, FString::Printf(TEXT("Please stay still while we scan surrondings")));
+	}
 }
 
 // Called to bind functionality to input
@@ -124,7 +141,7 @@ void ACustomARPawn::FindCandidateImages()
 	for (UARTrackedImage* trackedImage : trackedImages)
 	{
 		if (trackedImage->GetDetectedImage())
-			if (trackedImage->GetDetectedImage()->GetFreiendlyName().Equals("portrait"))//change to my van gogh freidnly anme when i have access
+			if (trackedImage->GetDetectedImage()->GetFriendlyName().Equals("Vangogh"))//change to my van gogh freidnly anme when i have access
 			{
 				//If the VanGogh image is first seen then spawn an actor in its location
 				if (!bGoghFound)
@@ -134,11 +151,16 @@ void ACustomARPawn::FindCandidateImages()
 				}
 				auto Tf = trackedImage->GetLocalToTrackingTransform();
 				// Setting the scale to the transform. this can be done using matrices too.
-				TF.SetScale3D(FVector(0.1f));
-				customActor->SetActorTransform(TF);
-				FVector SpawnLoc = TF.GetLocation();
+				Tf.SetScale3D(FVector(0.1f));
+				customActor->SetActorTransform(Tf);
+				FVector SpawnLoc = Tf.GetLocation();
 				GEngine->AddOnScreenDebugMessage(-1, 0, FColor::Red, FString::Printf(TEXT("%f, %f, %f"), SpawnLoc.X, SpawnLoc.Y, SpawnLoc.Z));
 			}
 	}
+}
+
+void ACustomARPawn::ScanningForPlanes()
+{
+
 }
 

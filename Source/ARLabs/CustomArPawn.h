@@ -36,13 +36,18 @@ public:
 	virtual void DisplayCameraInfo();
 	virtual void SpawnCube();
 	virtual void FindCandidateImages();
+	virtual void ScanningForPlanes();
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite) USceneComponent* ScnComponent;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite) UCameraComponent* CameraComponent;
 
 	FTimerHandle cameraTicker;
 	float cameraNotifyLoopTime;
-	UARSessionConfig* Config;
+	FTimerHandle scanningTicker;
+	float scanningTime;
+	class UARSessionConfig* Config;
 	bool bGoghFound = false;
-	ACustomARActor* customActor
+	ACustomARActor* customActor;
+	bool scanningForPlanes;
+	float intialTime;
 };
