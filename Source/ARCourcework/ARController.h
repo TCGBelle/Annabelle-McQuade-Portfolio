@@ -28,8 +28,10 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-	virtual void SpawnGate();
+	virtual void SpawnGate(int Tracking);
 	virtual void FindCandidateImages();
+
+	bool FindTrackedImages(int Tracking);
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite) USceneComponent* SceneComponent;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite) UCameraComponent* CameraComponent;

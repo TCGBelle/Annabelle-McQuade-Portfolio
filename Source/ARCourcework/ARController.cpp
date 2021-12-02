@@ -34,18 +34,39 @@ void AARController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	//if state = checking
+	bool bContinue = false;
 	// spawn UI  widget asking to scan Start point
-	FindCandidateImages();//passing start point actor and gameobject start
+	while (bContinue == false)
+	{
+		bContinue = FindTrackedImages(0);//passing start point actor and gameobject start
+	}
 	//Spawn enemy AI
 	//Spawn Player actor
+	bContinue = false; //ask player if they want to continue
 	// once found spawn ui widget asking to scan check point 1
-	//FindCandidateImages();//passing checkpoint actor and gameobject Gate 1
+	while (bContinue == false)
+	{
+		bContinue = FindTrackedImages(1);//passing checkpoint actor and gameobject Gate 1
+	}
+	bContinue = false;
 	// once found spawn ui widget asking to scan check point 2
-	//FindCandidateImages();//passing checkpoint actor and gameobject Gate 2
+	while (bContinue == false)
+	{
+		bContinue = FindTrackedImages(2);//passing checkpoint actor and gameobject Gate 2
+	}
+	bContinue = false; //ask player if they want to continue
 	// once found spawn ui widget asking to scan check point 3
-	//FindCandidateImages();//passing checkpoint actor and gameobject Gate 3
+	while (bContinue == false)
+	{
+		FindTrackedImages(3);//passing checkpoint actor and gameobject Gate 3
+	}
+	bContinue = false; //ask player if they want to continue
 	// once found spawn ui widget asking to scan check point 4
-	//FindCandidateImages();//passing checkpoint actor and gameobject Gate 4
+	while (bContinue == false)
+	{
+		FindTrackedImages(4);//passing checkpoint actor and gameobject Gate 4
+	}
+	bContinue = false; //ask player if they want to continue
 	
 	// get world position of start, and gates 1 - 4
 		// draw beziar curve
@@ -91,12 +112,28 @@ void AARController::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 
 }
 
-void AARController::SpawnGate()
+void AARController::SpawnGate(int Tracking)
 {
 	FActorSpawnParameters SpawnInfo;
 	FRotator myRot(0, 0, 0);
 	FVector myLoc(900, 0, 0);
-	Gate1 = GetWorld()->SpawnActor<AARCheckPoint>(myLoc, myRot, SpawnInfo);
+	switch (Tracking) {
+	case 0 : 
+		//Start = GetWorld()->SpawnActor<AARCheckerFlag>(myLoc, myRot, SpawnInfo);
+		break;
+	case 1:
+		Gate1 = GetWorld()->SpawnActor<AARCheckPoint>(myLoc, myRot, SpawnInfo);
+		break;
+	case 2:
+		Gate2 = GetWorld()->SpawnActor<AARCheckPoint>(myLoc, myRot, SpawnInfo);
+		break;
+	case 3:
+		Gate3 = GetWorld()->SpawnActor<AARCheckPoint>(myLoc, myRot, SpawnInfo);
+		break;
+	case 4:
+		Gate4 = GetWorld()->SpawnActor<AARCheckPoint>(myLoc, myRot, SpawnInfo);
+		break;
+	}
 }
 
 void AARController::FindCandidateImages()
@@ -115,15 +152,56 @@ void AARController::FindCandidateImages()
 				{
 					SpawnGate();
 					bGoghFound = true;
-
+				}
 					auto Tf = trackedImage->GetLocalToTrackingTransform();
 					// Setting the scale to the transform. this can be done using matrices too.
 					Tf.SetScale3D(FVector(0.01f));
 					Gate1->SetActorTransform(Tf); //set the gates tranform to that of the picture.
-				}
 				FVector SpawnLoc = Tf.GetLocation();
 				GEngine->AddOnScreenDebugMessage(-1, 0, FColor::Red, FString::Printf(TEXT("%f, %f, %f"), SpawnLoc.X, SpawnLoc.Y, SpawnLoc.Z));
 			}
+	}
+}
+
+bool AARController::FindTrackedImages(int Tracking)
+{
+	auto trackedImages = UARBlueprintLibrary::GetAllTrackedImages();
+	for (UARTrackedImage* trackedImage : trackedImages)
+	{
+		if (trackedImage->GetDetectedImage())
+		{
+			if (trackedImage->GetDetectedImage()->GetFriendlyName().Equals("Vangogh"))//change to my van gogh freidnly anme when i have access
+			{
+				if (!bGoghFound)
+				{
+					SpawnGate(Tracking);
+					bGoghFound = true;
+
+					auto Tf = trackedImage->GetLocalToTrackingTransform();
+					// Setting the scale to the transform. this can be done using matrices too.
+					Tf.SetScale3D(FVector(0.01f));
+					switch (Tracking) {
+					case 0:
+						//Start->SetActorTransform(Tf); //set the Start tranform to that of the picture.
+						break;
+					case 1:
+						Gate1->SetActorTransform(Tf); //set the gates tranform to that of the picture.
+						break;
+					case 2:
+						Gate2->SetActorTransform(Tf); //set the gates tranform to that of the picture.
+						break;
+					case 3:
+						Gate3->SetActorTransform(Tf); //set the gates tranform to that of the picture.
+						break;
+					case 4:
+						Gate4->SetActorTransform(Tf); //set the gates tranform to that of the picture.
+						break;
+					}
+					return true;
+				}
+				return false;
+			}
+		}
 	}
 }
 
