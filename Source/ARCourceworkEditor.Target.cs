@@ -3,13 +3,13 @@
 using UnrealBuildTool;
 using System.Collections.Generic;
 
-public class ARLabsEditorTarget : TargetRules
+public class ARCourceworkEditorTarget : TargetRules
 {
-	public ARLabsEditorTarget(TargetInfo Target) : base(Target)
+	public ARCourceworkEditorTarget(TargetInfo Target) : base(Target)
 	{
 		Type = TargetType.Editor;
 		DefaultBuildSettings = BuildSettingsVersion.V2;
 
-		ExtraModuleNames.AddRange( new string[] { "ARLabs" } );
+		ExtraModuleNames.AddRange( new string[] { "ARCourcework" } );
 	}
 }

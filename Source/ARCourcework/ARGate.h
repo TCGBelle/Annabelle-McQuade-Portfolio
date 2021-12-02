@@ -4,16 +4,18 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "BulletSphere.generated.h"
+#include <Runtime/Engine/Classes/Components/BoxComponent.h>
+#include "ARGate.generated.h"
+
 
 UCLASS()
-class ARLABS_API ABulletSphere : public AActor
+class ARCOURCEWORK_API AARGate : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	ABulletSphere();
+	AARGate();
 
 protected:
 	// Called when the game starts or when spawned
@@ -22,9 +24,11 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-	UPROPERTY(Category = "myCategory", VisibleAnywhere, BlueprintReadWrite)
+	UPROPERTY(Category = "Root", VisibleAnywhere, BlueprintReadWrite)
 		USceneComponent* SceneComponent;
-	UPROPERTY(Category = "MechCatagorey", VisibleAnywhere, BlueprintReadWrite)
+	UPROPERTY(Category = "MeshCatagorey", VisibleAnywhere, BlueprintReadWrite)
 		UStaticMeshComponent* StaticMeshComponent;
+	UPROPERTY(Category = "TriggerCatagorey", VisibleAnywhere, BlueprintReadWrite)
+		UBoxComponent* BoxCollision;
 	UPROPERTY(Category = "Location", BlueprintReadWrite) FVector Location;
 };

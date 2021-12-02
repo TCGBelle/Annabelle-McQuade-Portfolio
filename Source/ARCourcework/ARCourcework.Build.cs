@@ -2,13 +2,13 @@
 
 using UnrealBuildTool;
 
-public class ARLabs : ModuleRules
+public class ARCourcework : ModuleRules
 {
-	public ARLabs(ReadOnlyTargetRules Target) : base(Target)
+	public ARCourcework(ReadOnlyTargetRules Target) : base(Target)
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 	
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "AugmentedReality", "ProceduralMeshComponent" });
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "AugmentedReality" });
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
 
