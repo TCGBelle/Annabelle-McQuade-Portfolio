@@ -29,9 +29,9 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	virtual void SpawnGate(int Tracking);
-	virtual void FindCandidateImages();
+	//virtual void FindCandidateImages();
 
-	bool FindTrackedImages(int Tracking);
+	virtual void FindTrackedImages(int Tracking);
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite) USceneComponent* SceneComponent;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite) UCameraComponent* CameraComponent;
@@ -44,4 +44,5 @@ public:
 	AARCheckPoint* Gate3;
 	AARCheckPoint* Gate4;
 	GameStates State;
+	bool bContinue;
 };

@@ -34,11 +34,11 @@ void AARController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	//if state = checking
-	bool bContinue = false;
+	bContinue = false;
 	// spawn UI  widget asking to scan Start point
 	while (bContinue == false)
 	{
-		bContinue = FindTrackedImages(0);//passing start point actor and gameobject start
+		FindTrackedImages(0);//passing start point actor and gameobject start
 	}
 	//Spawn enemy AI
 	//Spawn Player actor
@@ -46,13 +46,13 @@ void AARController::Tick(float DeltaTime)
 	// once found spawn ui widget asking to scan check point 1
 	while (bContinue == false)
 	{
-		bContinue = FindTrackedImages(1);//passing checkpoint actor and gameobject Gate 1
+		FindTrackedImages(1);//passing checkpoint actor and gameobject Gate 1
 	}
 	bContinue = false;
 	// once found spawn ui widget asking to scan check point 2
 	while (bContinue == false)
 	{
-		bContinue = FindTrackedImages(2);//passing checkpoint actor and gameobject Gate 2
+		FindTrackedImages(2);//passing checkpoint actor and gameobject Gate 2
 	}
 	bContinue = false; //ask player if they want to continue
 	// once found spawn ui widget asking to scan check point 3
@@ -136,7 +136,7 @@ void AARController::SpawnGate(int Tracking)
 	}
 }
 
-void AARController::FindCandidateImages()
+/*void AARController::FindCandidateImages()
 {
 	
 	auto trackedImages = UARBlueprintLibrary::GetAllTrackedImages();
@@ -161,9 +161,9 @@ void AARController::FindCandidateImages()
 				GEngine->AddOnScreenDebugMessage(-1, 0, FColor::Red, FString::Printf(TEXT("%f, %f, %f"), SpawnLoc.X, SpawnLoc.Y, SpawnLoc.Z));
 			}
 	}
-}
+}*/
 
-bool AARController::FindTrackedImages(int Tracking)
+void AARController::FindTrackedImages(int Tracking)
 {
 	auto trackedImages = UARBlueprintLibrary::GetAllTrackedImages();
 	for (UARTrackedImage* trackedImage : trackedImages)
@@ -197,9 +197,8 @@ bool AARController::FindTrackedImages(int Tracking)
 						Gate4->SetActorTransform(Tf); //set the gates tranform to that of the picture.
 						break;
 					}
-					return true;
+					bContinue = true;
 				}
-				return false;
 			}
 		}
 	}
