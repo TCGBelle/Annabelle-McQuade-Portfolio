@@ -39,3 +39,12 @@ bool UARGameInstance::GetRacingState() const
 {
 	return bRacingState;
 }
+
+void UARGameInstance::SetProgressTracker(int NewTracker)
+{
+}
+
+int UARGameInstance::GetProgressTracker() const
+{
+	return 0;
+}
