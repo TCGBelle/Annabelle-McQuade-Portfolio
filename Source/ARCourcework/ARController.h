@@ -7,6 +7,7 @@
 #include "GameFramework/Pawn.h"
 #include "ARBlueprintLibrary.h"
 #include "ARCheckPoint.h"
+//#include "ARGameInstance.h"
 #include "ARController.generated.h"
 
 UCLASS()
@@ -17,7 +18,6 @@ class ARCOURCEWORK_API AARController : public APawn
 public:
 	// Sets default values for this pawn's properties
 	AARController();
-	enum GameStates { Checking, Racing };
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -43,6 +43,6 @@ public:
 	AARCheckPoint* Gate2;
 	AARCheckPoint* Gate3;
 	AARCheckPoint* Gate4;
-	GameStates State;
 	bool bContinue;
+	//UARGameInstance* GameInstanceRef;
 };

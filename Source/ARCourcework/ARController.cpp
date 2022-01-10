@@ -17,8 +17,7 @@ AARController::AARController()
 
 	static ConstructorHelpers::FObjectFinder<UARSessionConfig>ARConfig(TEXT("ARSessionConfig'/Game/Images/ARSessionConfig2.ARSessionConfig2'"));
 	ARPointer = ARConfig.Object;
-
-	State = Checking;
+	//GameInstanceRef = Cast<UARGameInstance>(GEngine->GetWorld()->GetGameInstance());
 }
 
 // Called when the game starts or when spawned
