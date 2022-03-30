@@ -8,6 +8,7 @@ void UARGameInstance::Init()
 	bScanningState = false;
 	iScanningTracking = 0;
 	bRacingState = false;
+	bRulesState = true;
 }
 
 void UARGameInstance::SetScanningState(bool NewState)
@@ -42,9 +43,20 @@ bool UARGameInstance::GetRacingState() const
 
 void UARGameInstance::SetProgressTracker(int NewTracker)
 {
+	iProgressTracker = NewTracker;
 }
 
 int UARGameInstance::GetProgressTracker() const
 {
-	return 0;
+	return iProgressTracker;
+}
+
+void UARGameInstance::SetRulesState(bool NewState)
+{
+	bRulesState = NewState;
+}
+
+bool UARGameInstance::GetRulesState() const
+{
+	return bRulesState;
 }

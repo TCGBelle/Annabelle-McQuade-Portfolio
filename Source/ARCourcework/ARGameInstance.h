@@ -34,6 +34,10 @@ public:
 	void SetProgressTracker(int NewTracker);
 	UFUNCTION(BlueprintCallable)
 	int GetProgressTracker() const;
+	UFUNCTION(BlueprintCallable)
+	void SetRulesState(bool NewState);
+	UFUNCTION(BlueprintCallable)
+	bool GetRulesState() const;
 private:
 	UPROPERTY(BlueprintGetter = GetScanningState)
 	bool bScanningState;
@@ -43,5 +47,7 @@ private:
 	bool bRacingState;
 	UPROPERTY(BlueprintGetter = GetProgressTracker)
 	int iProgressTracker;
+	UPROPERTY(BlueprintGetter = GetScanningState)
+	bool bRulesState;
 
 };

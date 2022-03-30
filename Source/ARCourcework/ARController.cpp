@@ -179,6 +179,7 @@ void AARController::SpawnGate(int Tracking)
 
 void AARController::FindTrackedImages(int Tracking)
 {
+	//add in rules state change.
 	auto trackedImages = UARBlueprintLibrary::GetAllTrackedImages();
 	for (UARTrackedImage* trackedImage : trackedImages)
 	{
