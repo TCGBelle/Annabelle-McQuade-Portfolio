@@ -10,6 +10,7 @@
 //#include "ARGameInstance.h"
 #include "ARController.generated.h"
 
+class UARGameInstance;
 UCLASS()
 class ARCOURCEWORK_API AARController : public APawn
 {
@@ -44,5 +45,7 @@ public:
 	AARCheckPoint* Gate3;
 	AARCheckPoint* Gate4;
 	bool bContinue;
-	//UARGameInstance* GameInstanceRef;
+	UARGameInstance* GameInstanceRef;
 };
+
+

@@ -1,6 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
+#include "ARGameInstance.h"
 #include "ARController.h"
 
 // Sets default values
@@ -17,14 +17,19 @@ AARController::AARController()
 
 	static ConstructorHelpers::FObjectFinder<UARSessionConfig>ARConfig(TEXT("ARSessionConfig'/Game/Images/ARSessionConfig2.ARSessionConfig2'"));
 	ARPointer = ARConfig.Object;
-	//GameInstanceRef = Cast<UARGameInstance>(GEngine->GetWorld()->GetGameInstance());
+	//UARGameInstance* 
+	
 }
 
 // Called when the game starts or when spawned
 void AARController::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+		if (GetWorld())
+		{
+			GameInstanceRef = Cast<UARGameInstance>(GetWorld()->GetGameInstance());
+		}
 	UARBlueprintLibrary::StartARSession(ARPointer);
 }
 
@@ -32,6 +37,7 @@ void AARController::BeginPlay()
 void AARController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	
 	// UI rules widget spawned by level 
 	//if (GameInstanceRef->GetScanningState() == true){ if 1
 		//switch (GameInstanceRef->GetScanningTracking()) {
