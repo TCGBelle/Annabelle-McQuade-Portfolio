@@ -9,6 +9,8 @@ void UARGameInstance::Init()
 	iScanningTracking = 0;
 	bRacingState = false;
 	bRulesState = true;
+	iPlayerTracking = 0;
+	iAiTracking = 0;
 }
 
 void UARGameInstance::SetScanningState(bool NewState)
@@ -60,3 +62,87 @@ bool UARGameInstance::GetRulesState() const
 {
 	return bRulesState;
 }
+
+void UARGameInstance::SetStartTransform(FTransform NewTransform)
+{
+	UTstart = NewTransform;
+}
+
+FTransform UARGameInstance::GetStartTransform() const
+{
+	return FTransform(UTstart);
+}
+
+void UARGameInstance::SetGate1Transform(FTransform NewTransform)
+{
+	UTgate1 = NewTransform;
+}
+
+FTransform UARGameInstance::GetGate1Transform() const
+{
+	return FTransform(UTgate1);
+}
+
+
+void UARGameInstance::SetGate2Transform(FTransform NewTransform)
+{
+	UTgate2 = NewTransform;
+}
+
+FTransform UARGameInstance::GetGate2Transform() const
+{
+	return FTransform(UTgate2);
+}
+
+void UARGameInstance::SetGate3Transform(FTransform NewTransform)
+{
+	UTgate3 = NewTransform;
+}
+
+FTransform UARGameInstance::GetGate3Transform() const
+{
+	return FTransform(UTgate3);
+}
+
+void UARGameInstance::SetGate4Transform(FTransform NewTransform)
+{
+	UTgate4 = NewTransform;
+}
+
+FTransform UARGameInstance::GetGate4Transform() const
+{
+	return FTransform(UTgate4);
+}
+
+void UARGameInstance::IncPlyaerTracker()
+{
+	iPlayerTracking++;
+}
+
+int UARGameInstance::GetPlayerTracker()
+{
+	return iPlayerTracking;
+}
+
+void UARGameInstance::SetPlayerTracker(int tracker)
+{
+	iPlayerTracking = tracker;
+}
+
+void UARGameInstance::IncAiTracker()
+{
+	iAiTracking++;
+}
+
+int UARGameInstance::GetAiTracker()
+{
+	return iAiTracking;
+}
+
+void UARGameInstance::SetAiTracker(int tracker)
+{
+	iAiTracking = tracker;
+}
+
+
+
