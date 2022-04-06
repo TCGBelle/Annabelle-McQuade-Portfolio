@@ -99,6 +99,8 @@ void AARController::Tick(float DeltaTime)
 	//change state to racing.
 
 	if (GameInstanceRef->GetRacingState() == true) { //if 2
+		//player movment
+		//ai movment
 		switch (GameInstanceRef->GetPlayerTracker()) {
 		case 1:
 			//check if player has hit check point 1
@@ -163,21 +165,22 @@ void AARController::SpawnGate(int Tracking)
 	switch (Tracking) {
 	case 1 : 
 		//Start = GetWorld()->SpawnActor<AActor>(myLoc, myRot, SpawnInfo);
-		GetWorld()->SpawnActor<AActor>(uStartGateActor, myLoc, myRot);
+		aStart = GetWorld()->SpawnActor<AActor>(uStartGateActor, myLoc, myRot);
+		aEnemy = GetWorld()->SpawnActor<AActor>(uEnemy, myLoc, myRot);
 		//move player
 		//spawn ai
 		break;
 	case 2:
-		
+		aGate1 = GetWorld()->SpawnActor<AActor>(uGateActor1, myLoc, myRot);
 		break;
 	case 3:
-		
+		aGate2 = GetWorld()->SpawnActor<AActor>(uGateActor1, myLoc, myRot);
 		break;
 	case 4:
-		
+		aGate3 = GetWorld()->SpawnActor<AActor>(uGateActor1, myLoc, myRot);
 		break;
 	case 5:
-		
+		aGate4 = GetWorld()->SpawnActor<AActor>(uGateActor1, myLoc, myRot);
 		break;
 	}
 }
@@ -230,7 +233,8 @@ void AARController::FindTrackedImages(int Tracking)
 						// Setting the scale to the transform. this can be done using matrices too.
 						Tf.SetScale3D(FVector(0.01f));
 
-						//Start->SetActorTransform(Tf); //set the Start tranform to that of the picture.
+						aStart->SetActorTransform(Tf); //set the Start tranform to that of the picture.
+						aEnemy->SetActorTransform(GameInstanceRef->GetAiStart());
 						GameInstanceRef->SetStartTransform(Tf);
 					}
 					bContinue = true;
@@ -248,19 +252,19 @@ void AARController::FindTrackedImages(int Tracking)
 					Tf.SetScale3D(FVector(0.01f));
 					switch (Tracking) {
 					case 2:
-						//Gate1->SetActorTransform(Tf); //set the gates tranform to that of the picture.
+						aGate1->SetActorTransform(Tf); //set the gates tranform to that of the picture.
 						GameInstanceRef->SetGate1Transform(Tf);
 						break;
 					case 3:
-						//Gate2->SetActorTransform(Tf); //set the gates tranform to that of the picture.
+						aGate2->SetActorTransform(Tf); //set the gates tranform to that of the picture.
 						GameInstanceRef->SetGate2Transform(Tf);
 						break;
 					case 4:
-						//Gate3->SetActorTransform(Tf); //set the gates tranform to that of the picture.
+						aGate3->SetActorTransform(Tf); //set the gates tranform to that of the picture.
 						GameInstanceRef->SetGate3Transform(Tf);
 						break;
 					case 5:
-						//Gate4->SetActorTransform(Tf); //set the gates tranform to that of the picture.
+						aGate4->SetActorTransform(Tf); //set the gates tranform to that of the picture.
 						GameInstanceRef->SetGate4Transform(Tf);
 						break;
 					}

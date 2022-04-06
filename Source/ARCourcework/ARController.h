@@ -53,6 +53,14 @@ public:
 	TSubclassOf<AActor> uGateActor3;
 	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<AActor> uGateActor4;
+	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<AActor> uEnemy;
+	AActor* aStart;
+	AActor* aGate1;
+	AActor* aGate2;
+	AActor* aGate3;
+	AActor* aGate4;
+	AActor* aEnemy;
 };
 
 

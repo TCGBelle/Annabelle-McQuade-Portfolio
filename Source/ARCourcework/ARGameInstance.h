@@ -59,17 +59,25 @@ public:
 	UFUNCTION(BlueprintCallable)
 	FTransform GetGate4Transform() const;
 	UFUNCTION(BlueprintCallable)
-		void IncPlyaerTracker();
+		void IncPlayerTracker();
 	UFUNCTION(BlueprintCallable)
-		int GetPlayerTracker();
+		int GetPlayerTracker() const;
 	UFUNCTION(BlueprintCallable)
 		void SetPlayerTracker(int tracker);//only used to reset game.
 	UFUNCTION(BlueprintCallable)
 		void IncAiTracker();
 	UFUNCTION(BlueprintCallable)
-		int GetAiTracker();
+		int GetAiTracker() const;
 	UFUNCTION(BlueprintCallable)
 		void SetAiTracker(int tracker);//only used to reset game.
+	UFUNCTION(BlueprintCallable)
+		void SetPlayerStart(FTransform trans);
+	UFUNCTION(BlueprintCallable)
+		FTransform GetPlayerStart() const;
+	UFUNCTION(BlueprintCallable)
+		void SetAiStart(FTransform trans);
+	UFUNCTION(BlueprintCallable)
+		FTransform GetAiStart() const;
 private:
 	UPROPERTY(BlueprintGetter = GetScanningState)
 	bool bScanningState;
@@ -91,8 +99,13 @@ private:
 		FTransform UTgate3;
 	UPROPERTY(BlueprintGetter = GetGate4Transform)
 		FTransform UTgate4;
-	UPROPERTY(BlueprintGetter = GetScanningTracking)
+	UPROPERTY(BlueprintGetter = GetPlayerTracker)
 		int iPlayerTracking;
-	UPROPERTY(BlueprintGetter = GetScanningTracking)
+	UPROPERTY(BlueprintGetter = GetAiTracker)
 		int iAiTracking;
+	UPROPERTY(BlueprintGetter = GetPlayerStart)
+		FTransform tPlayerStart;
+	UPROPERTY(BlueprintGetter = GetAiStart)
+		FTransform tAiStart;
+
 };

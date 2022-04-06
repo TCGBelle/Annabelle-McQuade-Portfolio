@@ -114,12 +114,12 @@ FTransform UARGameInstance::GetGate4Transform() const
 	return FTransform(UTgate4);
 }
 
-void UARGameInstance::IncPlyaerTracker()
+void UARGameInstance::IncPlayerTracker()
 {
 	iPlayerTracking++;
 }
 
-int UARGameInstance::GetPlayerTracker()
+int UARGameInstance::GetPlayerTracker() const
 {
 	return iPlayerTracking;
 }
@@ -134,7 +134,7 @@ void UARGameInstance::IncAiTracker()
 	iAiTracking++;
 }
 
-int UARGameInstance::GetAiTracker()
+int UARGameInstance::GetAiTracker() const
 {
 	return iAiTracking;
 }
@@ -143,6 +143,28 @@ void UARGameInstance::SetAiTracker(int tracker)
 {
 	iAiTracking = tracker;
 }
+
+void UARGameInstance::SetPlayerStart(FTransform trans)
+{
+	tPlayerStart = trans;
+}
+
+FTransform UARGameInstance::GetPlayerStart() const
+{
+	return tPlayerStart;
+}
+
+void UARGameInstance::SetAiStart(FTransform trans)
+{
+	tAiStart = trans;
+}
+
+FTransform UARGameInstance::GetAiStart() const
+{
+	return tAiStart;
+}
+
+
 
 
 
