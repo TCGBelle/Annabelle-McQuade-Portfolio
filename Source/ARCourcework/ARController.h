@@ -19,6 +19,7 @@ class ARCOURCEWORK_API AARController : public APawn
 public:
 	// Sets default values for this pawn's properties
 	AARController();
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -40,12 +41,18 @@ public:
 	FVector CenterPoint;
 	bool bGoghFound = false;
 	UARSessionConfig* ARPointer;
-	AARCheckPoint* Gate1;
-	AARCheckPoint* Gate2;
-	AARCheckPoint* Gate3;
-	AARCheckPoint* Gate4;
 	bool bContinue;
 	UARGameInstance* GameInstanceRef;
+	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<AActor> uStartGateActor;
+	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<AActor> uGateActor1;
+	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<AActor> uGateActor2;
+	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<AActor> uGateActor3;
+	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
+	TSubclassOf<AActor> uGateActor4;
 };
 
 

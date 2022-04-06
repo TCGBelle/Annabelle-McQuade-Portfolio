@@ -17,7 +17,9 @@ AARController::AARController()
 
 	static ConstructorHelpers::FObjectFinder<UARSessionConfig>ARConfig(TEXT("ARSessionConfig'/Game/Images/ARSessionConfig2.ARSessionConfig2'"));
 	ARPointer = ARConfig.Object;
-	//UARGameInstance* 
+	//static ConstructorHelpers::FObjectFinder<AActor>BPFinder(TEXT("Blueprint'/Game/Blueprints/StartGate.StartGate'"));
+	//uStartGateActor = BPFinder.Object;
+	//static ConstructorHelpers::FObjectFinder<AActor>BPFinder(TEXT("Blueprint'/Game/Blueprints/StartGate.StartGate'"));
 	
 }
 
@@ -97,41 +99,52 @@ void AARController::Tick(float DeltaTime)
 	//change state to racing.
 
 	if (GameInstanceRef->GetRacingState() == true) { //if 2
-		if (GameInstanceRef->GetPlayerTracker() == 0)
-		{
+		switch (GameInstanceRef->GetPlayerTracker()) {
+		case 1:
 			//check if player has hit check point 1
 			//if yes set tracker to 1
-		}
-	//if tracker equals 1
-		if (GameInstanceRef->GetPlayerTracker() == 1)
-		{
+			break;
+		case 2:
 			//check if player has hit check point 2
 				//if yes set tracker to 2
-		}
-	//if tracker equals 2
+			break;
+		case 3:
 		//check if player has hit check point 3
 			//if yes set tracker to 3
-	//if tracker equals 3
+			break;
+		case 4:
 		//check if player has hit check point 4
 			//if yes set tracker to 4
-	//if tracker equals 4
 		//check if player has hit start
 			//if yes player wins*/
+			break;
+		default:
+			break;
+		}
 
-	/*check if ai has hit check point 1
-			if yes set aitracker to 1
-	if tracker equals 1
-		check if ai has hit check point 2
-				if yes set aitracker to 2
-	if tracker equals 2
-		check if ai has hit check point 3
-				if yes set aitracker to 3
-	if tracker equals 3
-		check if ai has hit check point 4
-				if yes set aitracker to 4
-	if tracker equals 4
-		check if ai has hit start
-				if yes ai wins*/
+		switch (GameInstanceRef->GetAiTracker())
+		{
+		case 1:
+				//if yes set aitracker to 1
+		//if tracker equals 1
+			break;
+		case 2:
+			//check if ai has hit check point 2
+					//if yes set aitracker to 2
+			break;
+		case 3:
+			//check if ai has hit check point 3
+					//if yes set aitracker to 3
+			break;
+		case 4:
+			//check if ai has hit check point 4
+					//if yes set aitracker to 4
+			break;
+			//check if ai has hit start
+					//if yes ai wins
+		default:
+			break;
+		}
 	}//if 2
 }
 
@@ -149,19 +162,22 @@ void AARController::SpawnGate(int Tracking)
 	FVector myLoc(900, 0, 0);
 	switch (Tracking) {
 	case 1 : 
-		//Start = GetWorld()->SpawnActor<AARCheckerFlag>(myLoc, myRot, SpawnInfo);
+		//Start = GetWorld()->SpawnActor<AActor>(myLoc, myRot, SpawnInfo);
+		GetWorld()->SpawnActor<AActor>(uStartGateActor, myLoc, myRot);
+		//move player
+		//spawn ai
 		break;
 	case 2:
-		Gate1 = GetWorld()->SpawnActor<AARCheckPoint>(myLoc, myRot, SpawnInfo);
+		
 		break;
 	case 3:
-		Gate2 = GetWorld()->SpawnActor<AARCheckPoint>(myLoc, myRot, SpawnInfo);
+		
 		break;
 	case 4:
-		Gate3 = GetWorld()->SpawnActor<AARCheckPoint>(myLoc, myRot, SpawnInfo);
+		
 		break;
 	case 5:
-		Gate4 = GetWorld()->SpawnActor<AARCheckPoint>(myLoc, myRot, SpawnInfo);
+		
 		break;
 	}
 }
@@ -232,19 +248,19 @@ void AARController::FindTrackedImages(int Tracking)
 					Tf.SetScale3D(FVector(0.01f));
 					switch (Tracking) {
 					case 2:
-						Gate1->SetActorTransform(Tf); //set the gates tranform to that of the picture.
+						//Gate1->SetActorTransform(Tf); //set the gates tranform to that of the picture.
 						GameInstanceRef->SetGate1Transform(Tf);
 						break;
 					case 3:
-						Gate2->SetActorTransform(Tf); //set the gates tranform to that of the picture.
+						//Gate2->SetActorTransform(Tf); //set the gates tranform to that of the picture.
 						GameInstanceRef->SetGate2Transform(Tf);
 						break;
 					case 4:
-						Gate3->SetActorTransform(Tf); //set the gates tranform to that of the picture.
+						//Gate3->SetActorTransform(Tf); //set the gates tranform to that of the picture.
 						GameInstanceRef->SetGate3Transform(Tf);
 						break;
 					case 5:
-						Gate4->SetActorTransform(Tf); //set the gates tranform to that of the picture.
+						//Gate4->SetActorTransform(Tf); //set the gates tranform to that of the picture.
 						GameInstanceRef->SetGate4Transform(Tf);
 						break;
 					}
