@@ -1,7 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "ARGameInstance.h"
+
 #include "ARController.h"
+#include "ARGameInstance.h"
 
 // Sets default values
 AARController::AARController()
@@ -17,10 +18,6 @@ AARController::AARController()
 
 	static ConstructorHelpers::FObjectFinder<UARSessionConfig>ARConfig(TEXT("ARSessionConfig'/Game/Images/ARSessionConfig2.ARSessionConfig2'"));
 	ARPointer = ARConfig.Object;
-	//static ConstructorHelpers::FObjectFinder<AActor>BPFinder(TEXT("Blueprint'/Game/Blueprints/StartGate.StartGate'"));
-	//uStartGateActor = BPFinder.Object;
-	//static ConstructorHelpers::FObjectFinder<AActor>BPFinder(TEXT("Blueprint'/Game/Blueprints/StartGate.StartGate'"));
-	
 }
 
 // Called when the game starts or when spawned
@@ -33,6 +30,7 @@ void AARController::BeginPlay()
 			GameInstanceRef = Cast<UARGameInstance>(GetWorld()->GetGameInstance());
 		}
 	UARBlueprintLibrary::StartARSession(ARPointer);
+	
 }
 
 // Called every frame
@@ -43,51 +41,51 @@ void AARController::Tick(float DeltaTime)
 	// UI rules widget spawned by level 
 	if (GameInstanceRef->GetScanningState() == true)
 	{ //if 1
-		switch (GameInstanceRef->GetScanningTracking()) {
-		case 1:
-			bContinue = false;
-			while (bContinue == false)
-			{
-				FindTrackedImages(1);//passing start point actor and gameobject start//
-			}
-			GameInstanceRef->SetProgressTracker(2);
-			GameInstanceRef->SetScanningState(false);
-			break;
+		switch (GameInstanceRef->GetProgressTracker()) {
 		case 2:
 			bContinue = false;
-			while (bContinue == false)
+			FindTrackedImages(1);//passing start point actor and gameobject start//
+			if (bContinue == true)
 			{
-				FindTrackedImages(2);//passing checkpoint actor and gameobject Gate 1//
+				GameInstanceRef->IncProgressTracker();
+				GameInstanceRef->SetScanningState(false);
 			}
-			GameInstanceRef->SetProgressTracker(3);
-			GameInstanceRef->SetScanningState(false);
-			break;
-		case 3:
-			bContinue = false;
-			while (bContinue == false)
-			{
-				FindTrackedImages(3);//passing checkpoint actor and gameobject Gate 2
-			}
-			GameInstanceRef->SetProgressTracker(4);
-			GameInstanceRef->SetScanningState(false);
 			break;
 		case 4:
 			bContinue = false;
-			while (bContinue == false)
+			FindTrackedImages(2);//passing checkpoint actor and gameobject Gate 1//
+			if (bContinue == true)
 			{
-				FindTrackedImages(4);//passing checkpoint actor and gameobject Gate 3
+				GameInstanceRef->IncProgressTracker();
+				GameInstanceRef->SetScanningState(false);
 			}
-			GameInstanceRef->SetProgressTracker(5);
-			GameInstanceRef->SetScanningState(false);
 			break;
-		case 5:
+		case 6:
 			bContinue = false;
-			while (bContinue == false)
+			FindTrackedImages(3);//passing checkpoint actor and gameobject Gate 2
+			if (bContinue == true)
 			{
-				FindTrackedImages(5);//passing checkpoint actor and gameobject Gate 4
+				GameInstanceRef->IncProgressTracker();
+				GameInstanceRef->SetScanningState(false);
 			}
-			GameInstanceRef->SetProgressTracker(6);
-			GameInstanceRef->SetScanningState(false);
+			break;
+		case 8:
+			bContinue = false;
+			FindTrackedImages(4);//passing checkpoint actor and gameobject Gate 3
+			if (bContinue == true)
+			{
+				GameInstanceRef->IncProgressTracker();
+				GameInstanceRef->SetScanningState(false);
+			}
+			break;
+		case 10:
+			bContinue = false;
+			FindTrackedImages(5);//passing checkpoint actor and gameobject Gate 4
+			if (bContinue == true)
+			{
+				GameInstanceRef->IncProgressTracker();
+				GameInstanceRef->SetScanningState(false);
+			}
 			break;
 		default:
 			break;
@@ -103,8 +101,7 @@ void AARController::Tick(float DeltaTime)
 		//ai movment
 		switch (GameInstanceRef->GetPlayerTracker()) {
 		case 1:
-			//check if player has hit check point 1
-			//if yes set tracker to 1
+			
 			break;
 		case 2:
 			//check if player has hit check point 2
@@ -119,6 +116,7 @@ void AARController::Tick(float DeltaTime)
 			//if yes set tracker to 4
 		//check if player has hit start
 			//if yes player wins*/
+			GameInstanceRef->SetGameOver(true);
 			break;
 		default:
 			break;
@@ -126,9 +124,10 @@ void AARController::Tick(float DeltaTime)
 
 		switch (GameInstanceRef->GetAiTracker())
 		{
+		case 0:
+			GameInstanceRef->SetNextPoint(GameInstanceRef->GetGate1Transform());
+			break;
 		case 1:
-				//if yes set aitracker to 1
-		//if tracker equals 1
 			break;
 		case 2:
 			//check if ai has hit check point 2
@@ -141,6 +140,7 @@ void AARController::Tick(float DeltaTime)
 		case 4:
 			//check if ai has hit check point 4
 					//if yes set aitracker to 4
+			GameInstanceRef->SetGameOver(true);
 			break;
 			//check if ai has hit start
 					//if yes ai wins
@@ -167,6 +167,7 @@ void AARController::SpawnGate(int Tracking)
 		//Start = GetWorld()->SpawnActor<AActor>(myLoc, myRot, SpawnInfo);
 		aStart = GetWorld()->SpawnActor<AActor>(uStartGateActor, myLoc, myRot);
 		aEnemy = GetWorld()->SpawnActor<AActor>(uEnemy, myLoc, myRot);
+		aPlayer = GetWorld()->SpawnActor<AActor>(uPlayer, myLoc, myRot);
 		//move player
 		//spawn ai
 		break;
@@ -235,6 +236,7 @@ void AARController::FindTrackedImages(int Tracking)
 
 						aStart->SetActorTransform(Tf); //set the Start tranform to that of the picture.
 						aEnemy->SetActorTransform(GameInstanceRef->GetAiStart());
+						aPlayer->SetActorTransform(GameInstanceRef->GetPlayerStart());
 						GameInstanceRef->SetStartTransform(Tf);
 					}
 					bContinue = true;
@@ -268,6 +270,7 @@ void AARController::FindTrackedImages(int Tracking)
 						GameInstanceRef->SetGate4Transform(Tf);
 						break;
 					}
+					bContinue = true;
 				}
 			}
 			

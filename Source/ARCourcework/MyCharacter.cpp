@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include "ARGameInstance.h"
 #include "MyCharacter.h"
+#include "ARGameInstance.h"
 
 // Sets default values
 AMyCharacter::AMyCharacter()
@@ -40,7 +40,8 @@ void AMyCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 
 void AMyCharacter::MoveForward()
 {
-	AddMovementInput(GetActorForwardVector());
+	AddMovementInput(GetActorForwardVector()+GameInstanceRef->GetUp());
+	AddMovementInput(GetActorRightVector() + GameInstanceRef->GetRight());
 	//if up button pressed
 }
 

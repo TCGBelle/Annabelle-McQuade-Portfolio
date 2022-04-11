@@ -78,6 +78,28 @@ public:
 		void SetAiStart(FTransform trans);
 	UFUNCTION(BlueprintCallable)
 		FTransform GetAiStart() const;
+	UFUNCTION(BlueprintCallable)
+		void SetUp(float Up);
+	UFUNCTION(BlueprintCallable)
+		float GetUp() const;
+	UFUNCTION(BlueprintCallable)
+		void SetRight(float Right);
+	UFUNCTION(BlueprintCallable)
+		float GetRight() const;
+	UFUNCTION(BlueprintCallable)
+		void SetAiBoxTrigger(bool hit);
+	UFUNCTION(BlueprintCallable)
+		bool GetAiBoxTrigger() const;
+	UFUNCTION(BlueprintCallable)
+		void SetNextPoint(FTransform nextPoint);
+	UFUNCTION(BlueprintCallable)
+		FTransform GetNextPoint() const;
+	UFUNCTION(BlueprintCallable)
+		void SetGameOver(bool GG);
+	UFUNCTION(BlueprintCallable)
+		bool GetGameOver() const;
+	UFUNCTION(BlueprintCallable)
+		void IncProgressTracker();
 private:
 	UPROPERTY(BlueprintGetter = GetScanningState)
 	bool bScanningState;
@@ -107,5 +129,14 @@ private:
 		FTransform tPlayerStart;
 	UPROPERTY(BlueprintGetter = GetAiStart)
 		FTransform tAiStart;
-
+	UPROPERTY(BlueprintGetter = GetUp)
+		float iUp;
+	UPROPERTY(BlueprintGetter = GetRight)
+		float iRight;
+	UPROPERTY(BlueprintGetter = GetAiBoxTrigger)
+		bool bAiBoxTrigger;
+	UPROPERTY(BlueprintGetter = GetNextPoint)
+		FTransform UTnextPoint;
+	UPROPERTY(BlueprintGetter = GetGameOver)
+		bool bGG;
 };

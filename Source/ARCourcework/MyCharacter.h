@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "MyCharacter.generated.h"
 
+class UARGameInstance;
 UCLASS()
 class ARCOURCEWORK_API AMyCharacter : public ACharacter
 {
@@ -26,7 +27,5 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	virtual void MoveForward();
-
 	UARGameInstance* GameInstanceRef;
-	float iAngleMod
 };

@@ -6,7 +6,6 @@
 #include "Camera/CameraComponent.h"
 #include "GameFramework/Pawn.h"
 #include "ARBlueprintLibrary.h"
-#include "ARCheckPoint.h"
 //#include "ARGameInstance.h"
 #include "ARController.generated.h"
 
@@ -55,12 +54,15 @@ public:
 	TSubclassOf<AActor> uGateActor4;
 	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<AActor> uEnemy;
+	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
+		TSubclassOf<AActor> uPlayer;
 	AActor* aStart;
 	AActor* aGate1;
 	AActor* aGate2;
 	AActor* aGate3;
 	AActor* aGate4;
 	AActor* aEnemy;
+	AActor* aPlayer;
 };
 
 

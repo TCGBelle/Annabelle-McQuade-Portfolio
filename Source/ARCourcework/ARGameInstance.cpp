@@ -7,10 +7,15 @@ void UARGameInstance::Init()
 {
 	bScanningState = false;
 	iScanningTracking = 0;
+	iProgressTracker = 0;
 	bRacingState = false;
 	bRulesState = true;
 	iPlayerTracking = 0;
 	iAiTracking = 0;
+	iUp = 0;
+	iRight = 0;
+	bAiBoxTrigger = false;
+	bGG = false;
 }
 
 void UARGameInstance::SetScanningState(bool NewState)
@@ -163,6 +168,64 @@ FTransform UARGameInstance::GetAiStart() const
 {
 	return tAiStart;
 }
+
+void UARGameInstance::SetUp(float Up)
+{
+	iUp = iUp + Up;
+}
+
+float UARGameInstance::GetUp() const
+{
+	return iUp;
+}
+
+
+
+void UARGameInstance::SetRight(float Right)
+{
+	iRight = iRight + Right;
+}
+
+float UARGameInstance::GetRight() const
+{
+	return iRight;
+}
+
+void UARGameInstance::SetAiBoxTrigger(bool hit)
+{
+	bAiBoxTrigger = hit;
+}
+
+bool UARGameInstance::GetAiBoxTrigger() const
+{
+	return bAiBoxTrigger;
+}
+
+void UARGameInstance::SetNextPoint(FTransform nextPoint)
+{
+	UTnextPoint = nextPoint;
+}
+
+FTransform UARGameInstance::GetNextPoint() const
+{
+	return UTnextPoint;
+}
+
+void UARGameInstance::SetGameOver(bool GG)
+{
+	bGG = GG;
+}
+
+bool UARGameInstance::GetGameOver() const
+{
+	return bGG;
+}
+
+void UARGameInstance::IncProgressTracker()
+{
+	iProgressTracker++;
+}
+
 
 
 
