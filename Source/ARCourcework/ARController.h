@@ -7,6 +7,7 @@
 #include "GameFramework/Pawn.h"
 #include "ARBlueprintLibrary.h"
 //#include "ARGameInstance.h"
+#include "Sound/SoundCue.h"
 #include "ARController.generated.h"
 
 class UARGameInstance;
@@ -33,6 +34,7 @@ public:
 	//virtual void FindCandidateImages();
 
 	virtual void FindTrackedImages(int Tracking);
+	virtual void Debug();
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite) USceneComponent* SceneComponent;
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite) UCameraComponent* CameraComponent;
@@ -56,6 +58,8 @@ public:
 	TSubclassOf<AActor> uEnemy;
 	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
 		TSubclassOf<AActor> uPlayer;
+	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
+		USoundCue* RaceMusic;
 	AActor* aStart;
 	AActor* aGate1;
 	AActor* aGate2;

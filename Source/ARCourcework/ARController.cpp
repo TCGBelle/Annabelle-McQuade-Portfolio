@@ -2,6 +2,8 @@
 
 
 #include "ARController.h"
+#include "Sound/SoundBase.h"
+#include "Kismet/GameplayStatics.h"
 #include "ARGameInstance.h"
 
 // Sets default values
@@ -37,18 +39,22 @@ void AARController::BeginPlay()
 void AARController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	
+	//InputComponent->BindAction("Debug", IE_Released, this, &AARController::Debug);
 	// UI rules widget spawned by level 
 	if (GameInstanceRef->GetScanningState() == true)
 	{ //if 1
 		switch (GameInstanceRef->GetProgressTracker()) {
 		case 2:
 			bContinue = false;
+			GameInstanceRef->SetRulesState(false);
 			FindTrackedImages(1);//passing start point actor and gameobject start//
 			if (bContinue == true)
 			{
+				aEnemy->SetActorTransform(GameInstanceRef->GetAiStart());
+				aPlayer->SetActorTransform(GameInstanceRef->GetPlayerStart());
 				GameInstanceRef->IncProgressTracker();
 				GameInstanceRef->SetScanningState(false);
+				GameInstanceRef->SetRulesState(true);
 			}
 			break;
 		case 4:
@@ -99,6 +105,8 @@ void AARController::Tick(float DeltaTime)
 	if (GameInstanceRef->GetRacingState() == true) { //if 2
 		//player movment
 		//ai movment
+		//Play music
+		UGameplayStatics::PlaySound2D(this, RaceMusic);
 		switch (GameInstanceRef->GetPlayerTracker()) {
 		case 1:
 			
@@ -128,12 +136,15 @@ void AARController::Tick(float DeltaTime)
 			GameInstanceRef->SetNextPoint(GameInstanceRef->GetGate1Transform());
 			break;
 		case 1:
+			GameInstanceRef->SetNextPoint(GameInstanceRef->GetGate2Transform());
 			break;
 		case 2:
+			GameInstanceRef->SetNextPoint(GameInstanceRef->GetGate3Transform());
 			//check if ai has hit check point 2
 					//if yes set aitracker to 2
 			break;
 		case 3:
+			GameInstanceRef->SetNextPoint(GameInstanceRef->GetGate4Transform());
 			//check if ai has hit check point 3
 					//if yes set aitracker to 3
 			break;
@@ -235,11 +246,10 @@ void AARController::FindTrackedImages(int Tracking)
 						Tf.SetScale3D(FVector(0.01f));
 
 						aStart->SetActorTransform(Tf); //set the Start tranform to that of the picture.
-						aEnemy->SetActorTransform(GameInstanceRef->GetAiStart());
-						aPlayer->SetActorTransform(GameInstanceRef->GetPlayerStart());
+
 						GameInstanceRef->SetStartTransform(Tf);
+						bContinue = true;
 					}
-					bContinue = true;
 				
 				}
 			
@@ -276,5 +286,10 @@ void AARController::FindTrackedImages(int Tracking)
 			
 		}
 	}
+}
+
+void AARController::Debug()
+{
+	GameInstanceRef->IncProgressTracker();
 }
 
