@@ -50,8 +50,7 @@ void AARController::Tick(float DeltaTime)
 			FindTrackedImages(1);//passing start point actor and gameobject start//
 			if (bContinue == true)
 			{
-				aEnemy->SetActorTransform(GameInstanceRef->GetAiStart());
-				aPlayer->SetActorTransform(GameInstanceRef->GetPlayerStart());
+				//aPlayer->SetActorLocation(FVector(250, 0, 0));
 				GameInstanceRef->IncProgressTracker();
 				GameInstanceRef->SetScanningState(false);
 				GameInstanceRef->SetRulesState(true);
@@ -96,6 +95,7 @@ void AARController::Tick(float DeltaTime)
 		default:
 			break;
 		}
+		
 	} //if 1
 	// get world position of start, and gates 1 - 4
 		// draw beziar curve
@@ -106,7 +106,11 @@ void AARController::Tick(float DeltaTime)
 		//player movment
 		//ai movment
 		//Play music
-		UGameplayStatics::PlaySound2D(this, RaceMusic);
+		if (!bStartMusic)
+		{
+			UGameplayStatics::PlaySound2D(this, RaceMusic);
+			bStartMusic = true;
+		}
 		switch (GameInstanceRef->GetPlayerTracker()) {
 		case 1:
 			
@@ -168,31 +172,30 @@ void AARController::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 
 }
 
-void AARController::SpawnGate(int Tracking)
+void AARController::SpawnGate(int Tracking, FTransform Tf)
 {
 	FActorSpawnParameters SpawnInfo;
-	FRotator myRot(0, 0, 0);
-	FVector myLoc(900, 0, 0);
+	FQuat myRot = Tf.GetRotation();
+	FVector myLoc  = Tf.GetLocation();
 	switch (Tracking) {
 	case 1 : 
 		//Start = GetWorld()->SpawnActor<AActor>(myLoc, myRot, SpawnInfo);
-		aStart = GetWorld()->SpawnActor<AActor>(uStartGateActor, myLoc, myRot);
-		aEnemy = GetWorld()->SpawnActor<AActor>(uEnemy, myLoc, myRot);
-		aPlayer = GetWorld()->SpawnActor<AActor>(uPlayer, myLoc, myRot);
+		aStart = GetWorld()->SpawnActor<AARGate>(uStartGateActor,Tf);
+		
 		//move player
 		//spawn ai
 		break;
 	case 2:
-		aGate1 = GetWorld()->SpawnActor<AActor>(uGateActor1, myLoc, myRot);
+		aGate1 = GetWorld()->SpawnActor<AActor>(uGateActor1, Tf);
 		break;
 	case 3:
-		aGate2 = GetWorld()->SpawnActor<AActor>(uGateActor1, myLoc, myRot);
+		aGate2 = GetWorld()->SpawnActor<AActor>(uGateActor1, Tf);
 		break;
 	case 4:
-		aGate3 = GetWorld()->SpawnActor<AActor>(uGateActor1, myLoc, myRot);
+		aGate3 = GetWorld()->SpawnActor<AActor>(uGateActor1, Tf);
 		break;
 	case 5:
-		aGate4 = GetWorld()->SpawnActor<AActor>(uGateActor1, myLoc, myRot);
+		aGate4 = GetWorld()->SpawnActor<AActor>(uGateActor1, Tf);
 		break;
 	}
 }
@@ -238,15 +241,23 @@ void AARController::FindTrackedImages(int Tracking)
 				{
 					if (!bGoghFound)
 					{
-						SpawnGate(Tracking);
 						bGoghFound = true;
 
 						auto Tf = trackedImage->GetLocalToTrackingTransform();
+						//FTransform Tf;
+						//Tf.SetIdentity();
+						//Tf.SetLocation(FVector(350, 0, 0));
 						// Setting the scale to the transform. this can be done using matrices too.
-						Tf.SetScale3D(FVector(0.01f));
-
-						aStart->SetActorTransform(Tf); //set the Start tranform to that of the picture.
-
+						Tf.SetScale3D(FVector(0.1f));
+						SpawnGate(Tracking,Tf);
+						//aStart->SetActorTransform(Tf); //set the Start tranform to that of the picture.
+						FTransform player_Local_Tf, enemy_Local_Tf;
+						player_Local_Tf.SetLocation(FVector(-100, 0, 0));
+						enemy_Local_Tf.SetLocation(FVector(100, 0, 0));
+						FTransform player_World_Tf = player_Local_Tf * Tf;
+						FTransform enemy_World_Tf = enemy_Local_Tf * Tf;
+						aEnemy = GetWorld()->SpawnActor<AActor>(uEnemy, enemy_World_Tf);
+						aPlayer = GetWorld()->SpawnActor<AActor>(uPlayer, player_World_Tf);
 						GameInstanceRef->SetStartTransform(Tf);
 						bContinue = true;
 					}
@@ -256,34 +267,75 @@ void AARController::FindTrackedImages(int Tracking)
 			}
 			if (trackedImage->GetDetectedImage()->GetFriendlyName().Equals("World"))
 			{
-				if (Tracking > 1)
+				if (Tracking == 2)
 				{
-					SpawnGate(Tracking);
-					auto Tf = trackedImage->GetLocalToTrackingTransform();
-					// Setting the scale to the transform. this can be done using matrices too.
-					Tf.SetScale3D(FVector(0.01f));
-					switch (Tracking) {
-					case 2:
-						aGate1->SetActorTransform(Tf); //set the gates tranform to that of the picture.
+					if (!bWorldFound)
+					{
+						bWorldFound = true;
+						auto Tf = trackedImage->GetLocalToTrackingTransform();
+						// Setting the scale to the transform. this can be done using matrices too.
+						//Tf.SetScale3D(FVector(1.f));
+						SpawnGate(Tracking, Tf);
+						//aGate1->SetActorTransform(Tf); //set the gates tranform to that of the picture.
 						GameInstanceRef->SetGate1Transform(Tf);
-						break;
-					case 3:
-						aGate2->SetActorTransform(Tf); //set the gates tranform to that of the picture.
-						GameInstanceRef->SetGate2Transform(Tf);
-						break;
-					case 4:
-						aGate3->SetActorTransform(Tf); //set the gates tranform to that of the picture.
-						GameInstanceRef->SetGate3Transform(Tf);
-						break;
-					case 5:
-						aGate4->SetActorTransform(Tf); //set the gates tranform to that of the picture.
-						GameInstanceRef->SetGate4Transform(Tf);
-						break;
+						bContinue = true;
 					}
-					bContinue = true;
 				}
 			}
-			
+			if (trackedImage->GetDetectedImage()->GetFriendlyName().Equals("Luard"))
+			{
+				if (Tracking == 3)
+				{
+					if (!bLuardFound)
+					{
+						bLuardFound = true;
+
+						auto Tf = trackedImage->GetLocalToTrackingTransform();
+						// Setting the scale to the transform. this can be done using matrices too.
+						//Tf.SetScale3D(FVector(1.f));
+						SpawnGate(Tracking, Tf);
+						aGate2->SetActorTransform(Tf);
+						GameInstanceRef->SetGate2Transform(Tf);
+						bContinue = true;
+					}
+				}
+			}
+			if (trackedImage->GetDetectedImage()->GetFriendlyName().Equals("Bruce"))
+			{
+				if (Tracking == 4)
+				{
+					if (!bBruceFound)
+					{
+						bBruceFound = true;
+
+						auto Tf = trackedImage->GetLocalToTrackingTransform();
+						// Setting the scale to the transform. this can be done using matrices too.
+						//Tf.SetScale3D(FVector(1.f));
+						SpawnGate(Tracking, Tf);
+						aGate3->SetActorTransform(Tf); //set the gates tranform to that of the picture.
+						GameInstanceRef->SetGate3Transform(Tf);
+						bContinue = true;
+					}
+				}
+			}
+			if (trackedImage->GetDetectedImage()->GetFriendlyName().Equals("Orfist"))
+			{
+				if (Tracking == 5)
+				{
+					if (!bOrfistFound)
+					{
+						bOrfistFound = true;
+
+						auto Tf = trackedImage->GetLocalToTrackingTransform();
+						// Setting the scale to the transform. this can be done using matrices too.
+						//Tf.SetScale3D(FVector(1.f));
+						SpawnGate(Tracking, Tf);
+						aGate4->SetActorTransform(Tf); //set the gates tranform to that of the picture.
+						GameInstanceRef->SetGate4Transform(Tf);
+						bContinue = true;
+					}
+				}
+			}
 		}
 	}
 }

@@ -8,6 +8,7 @@
 #include "ARBlueprintLibrary.h"
 //#include "ARGameInstance.h"
 #include "Sound/SoundCue.h"
+#include "ARGate.h"
 #include "ARController.generated.h"
 
 class UARGameInstance;
@@ -30,7 +31,7 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-	virtual void SpawnGate(int Tracking);
+	virtual void SpawnGate(int Tracking, FTransform Tf);
 	//virtual void FindCandidateImages();
 
 	virtual void FindTrackedImages(int Tracking);
@@ -41,11 +42,15 @@ public:
 
 	FVector CenterPoint;
 	bool bGoghFound = false;
+	bool bWorldFound = false;
+	bool bLuardFound = false;
+	bool bBruceFound = false;
+	bool bOrfistFound = false;
 	UARSessionConfig* ARPointer;
 	bool bContinue;
 	UARGameInstance* GameInstanceRef;
 	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
-	TSubclassOf<AActor> uStartGateActor;
+	TSubclassOf<AARGate> uStartGateActor;
 	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
 	TSubclassOf<AActor> uGateActor1;
 	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
@@ -60,13 +65,14 @@ public:
 		TSubclassOf<AActor> uPlayer;
 	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
 		USoundCue* RaceMusic;
-	AActor* aStart;
+	AARGate* aStart;
 	AActor* aGate1;
 	AActor* aGate2;
 	AActor* aGate3;
 	AActor* aGate4;
 	AActor* aEnemy;
 	AActor* aPlayer;
+	bool bStartMusic = false;
 };
 
 

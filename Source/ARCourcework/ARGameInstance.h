@@ -125,7 +125,6 @@ private:
 		int iPlayerTracking;
 	UPROPERTY(BlueprintGetter = GetAiTracker)
 		int iAiTracking;
-	UPROPERTY(BlueprintGetter = GetPlayerStart)
 		FTransform tPlayerStart;
 	UPROPERTY(BlueprintGetter = GetAiStart)
 		FTransform tAiStart;

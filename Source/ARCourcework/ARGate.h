@@ -24,11 +24,15 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-	UPROPERTY(Category = "Root", VisibleAnywhere, BlueprintReadWrite)
-		USceneComponent* SceneComponent;
-	UPROPERTY(Category = "MeshCatagorey", VisibleAnywhere, BlueprintReadWrite)
-		UStaticMeshComponent* StaticMeshComponent;
-	UPROPERTY(Category = "TriggerCatagorey", VisibleAnywhere, BlueprintReadWrite)
-		UBoxComponent* BoxCollision;
-	UPROPERTY(Category = "Location", BlueprintReadWrite) FVector Location;
+	UFUNCTION(BlueprintCallable)
+	virtual void SetPlayerStart(FTransform tPStart);
+	UFUNCTION(BlueprintCallable)
+	FTransform GetPlayerStart() const;
+	UFUNCTION(BlueprintCallable)
+	virtual void SetAiStart(FTransform tEStart);
+	UFUNCTION(BlueprintCallable)
+	FTransform GetAiStart() const;
+private:
+	FTransform tPlayerStart;
+	FTransform tAiStart;
 };
